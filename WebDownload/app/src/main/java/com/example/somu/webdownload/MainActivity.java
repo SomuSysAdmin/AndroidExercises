@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
 
             Log.i("URL", params[0]);
-            return "Done";
+            return "Done!";
         }
     }
 
