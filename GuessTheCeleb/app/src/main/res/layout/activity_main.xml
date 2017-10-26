@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.somu.guesstheceleb.MainActivity">
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:paddingLeft="10dp"
+        android:text="Score : 0" />
+
+    <TextView
+        android:id="@+id/winStreak"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:paddingRight="10dp"
+        android:text="Max Win Streak : 0" />
+
+    <TextView
+        android:id="@+id/Banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/score"
+        android:foregroundGravity="center_vertical|center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
+        android:paddingBottom="7dp"
+        android:paddingTop="10dp"
+        android:text="Who's this Celeb?"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/option1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/option2"
+        android:layout_alignParentStart="true"
+        android:onClick="selected"
+        android:tag="op1"
+        android:text="Option 1" />
+
+    <Button
+        android:id="@+id/option2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/option3"
+        android:layout_alignParentStart="true"
+        android:onClick="selected"
+        android:tag="op2"
+        android:text="Option 2" />
+
+    <Button
+        android:id="@+id/option3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/option4"
+        android:layout_alignParentStart="true"
+        android:onClick="selected"
+        android:tag="op3"
+        android:text="Option 3" />
+
+    <Button
+        android:id="@+id/option4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:onClick="selected"
+        android:tag="op4"
+        android:text="Option 4" />
+
+    <ImageView
+        android:id="@+id/celebPic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/option1"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Banner"
+        android:onClick="testConnection"
+        android:padding="7dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@mipmap/ic_launcher" />
+</android.widget.RelativeLayout>
