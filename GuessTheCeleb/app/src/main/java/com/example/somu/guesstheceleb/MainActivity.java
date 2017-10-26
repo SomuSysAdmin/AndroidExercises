@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         protected Bitmap doInBackground(String... imgUrl) {
+            Log.d("IMG-URL", imgUrl[0]);
             Bitmap img=null;
             try {
                 URL dataSource = new URL(imgUrl[0]);
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     current = new CelebProfile(m.group(1), new URL("https:"+m.group(2)));
                 } catch (MalformedURLException e) {
+                    Log.i("Download","DB Download Failed!!");
                     e.printStackTrace();
                 }
                 list.add(current);
@@ -236,11 +239,16 @@ public class MainActivity extends AppCompatActivity {
 
         ImgDownloader dlTask = new ImgDownloader();
         try {
-            Bitmap currentImg = dlTask.execute("https:"+game.current.get(game.ansIdx).profLink).get();
+
+            /**
+             * This next line is stupid - conversion of text -> URL -> text -> URL wastes resources. Fix it.
+             */
+            Bitmap currentImg = dlTask.execute(game.current.get(game.ansIdx).profLink.toString()).get();
             celebPic.setImageBitmap(currentImg);
             downloadStatus = true;
 
         } catch (Exception e) {
+            Log.e("Async Task","Can't download Image!");
             e.printStackTrace();
             downloadStatus = false;
         }
@@ -252,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
      */
     void selected(View view){
         int ans = Integer.parseInt(view.getTag().toString().substring(2,3));
-        if(ans==game.ansIdx) {
+        if(--ans==game.ansIdx) {
             game.increaseScore();
             Toast.makeText(this, "You were absolutely right!", Toast.LENGTH_SHORT).show();
         } else {
@@ -279,5 +287,13 @@ public class MainActivity extends AppCompatActivity {
         op4 = (Button) findViewById(R.id.option4);
 
         load();
+
+        /**
+         * Debug below. DELETE!
+         */
+        Log.d("SubstringB1",op1.getTag().toString().substring(2,3));
+        Log.d("SubstringB2",op2.getTag().toString().substring(2,3));
+        Log.d("SubstringB3",op3.getTag().toString().substring(2,3));
+        Log.d("SubstringB4",op4.getTag().toString().substring(2,3));
     }
 }
