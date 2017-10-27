@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 import static java.lang.Thread.sleep;
 
 /**
- * Original version 1.0 of the program.
+ * Version 1.1 of the program.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         CelebProfile(String name, URL link) {
             this.name = name;
             this.profLink=link;
+            Log.i("Performance","Generated DS for "+name);
         }
     }
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... imgUrl) {
             Log.d("IMG-URL", imgUrl[0]);
+            Log.i("Performance","Image Download Started...");
             Bitmap img=null;
             try {
                 URL dataSource = new URL(imgUrl[0]);
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (java.io.IOException e) {
                 e.printStackTrace();
             }
-
+            Log.i("Performance","Image download finished!");
             return img;
         }
     }
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
          */
         @Override
         protected ArrayList<CelebProfile> doInBackground(String... url) {
+            Log.i("Performance","Data-Grepping started...");
             StringBuilder data = new StringBuilder();
             try {
                 URL dataSource = new URL(url[0]);
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             dbDownloaded=true;
+            Log.i("Performance","Data download finished!");
             return parser(data.toString());
         }
 
@@ -112,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
              * call to obtain JSON data - which we're dealing with directly now to reduce
              * page load time and complexity of RegEx required!
              */
+            Log.i("Performance","Parsing Started!");
             Pattern p = Pattern.compile("\"name\":\\s*\"(.+?)\"[\\s\\S]*?\"squareImage\":\\s*\"(.*?)\"");
             Matcher m = p.matcher(json);
 
@@ -125,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 list.add(current);
             }
+            Log.i("Performance","Data Grepping finished!");
             return list;
         }
     }
@@ -141,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
          * Increases score in case of right answer.
          */
         void increaseScore() {
+            Log.i("Performance","Score increased!");
             score++;
             maxStreak=Math.max(score, maxStreak);
         }
@@ -149,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
          * Resets score to zero in case of wrong answer.
          */
         void resetScore() {
+            Log.i("Performance","Score Reset!");
             score=0;
         }
 
@@ -156,10 +164,12 @@ public class MainActivity extends AppCompatActivity {
          * Constructor that sets up the ArrayList of Celebrity profiles.
          */
         GameEngine() {
+            Log.i("Performance","Geme Engine generation started...");
             NetConnect fetcher = new NetConnect();
             current = new ArrayList<CelebProfile>();
 
             try {
+                Log.i("Performance","Attempting to transfer data to dataStore...");
                 dataStore = fetcher.execute("https://www.forbes.com/ajax/list/data?year=2017&uri=celebrities&type=person")
                                    .get();
 
@@ -168,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+            Log.i("Performance","Game engine ready!");
         }
 
         /**
@@ -175,9 +186,11 @@ public class MainActivity extends AppCompatActivity {
          * @return
          */
         CelebProfile refreshGame() {
+            Log.i("Performance","Game refresh started...");
             for(int i=0;i<=dataStore.size();i++)
                 dataStore.get(i).visited=false;
             round=1;
+            Log.i("Performance","Done!");
             return getRandom();
         }
 
@@ -186,24 +199,17 @@ public class MainActivity extends AppCompatActivity {
          * @return - a CelebProfile object that will be added to the current set.
          */
         CelebProfile getRandom() {
+            Log.i("Performance","Generating a random profile...");
             int index;
             if(!(round<97)) {
                 return refreshGame();
             }
 
-            /**
-             * Waiting for the DB to be downloaded and stored in dataStore
-             */
-            while(!dbDownloaded) try {
-                sleep(1000);
-                Toast.makeText(MainActivity.this, "Downloading DB...", Toast.LENGTH_SHORT).show();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            Log.i("Performance","Waiting to find an unused celeb profile...");
             while (dataStore.get(index = new Random().nextInt(dataStore.size())).visited)
                 continue;
             round++;
+            Log.i("Performance","Done!");
             return dataStore.get(index);
         }
 
@@ -212,9 +218,11 @@ public class MainActivity extends AppCompatActivity {
          * The answer is chosen here!
          */
         void newSet() {
+            Log.i("Performance","Generating a new Set of profiles...");
             for(int i=0;i<4;i++) current.add(getRandom());
             ansIdx = new Random().nextInt(4);   // Randomly selects the pic to display (and the consequent answer).
             current.get(ansIdx).visited = true;
+            Log.i("Performance","Generation complete!");
         }
     }
 
@@ -222,8 +230,10 @@ public class MainActivity extends AppCompatActivity {
      * Simply checks if the image was downloaded or not. If not, reloads!
      */
     void testConnection() {
+        Log.i("Performance","Begin connection test...");
         if(!downloadStatus)
             load();
+        Log.i("Performance","Done!");
     }
 
     /**
@@ -231,11 +241,13 @@ public class MainActivity extends AppCompatActivity {
      * Connects the buttons to the answers, and causes an image download which is then assigned as the new Puzzle's celebrity image.
      */
     void load() {
+        Log.i("Performance","LOAD - reloading puzzle...");
         game.newSet();
         op1.setText(game.current.get(0).name);
         op2.setText(game.current.get(1).name);
         op3.setText(game.current.get(2).name);
         op4.setText(game.current.get(3).name);
+        Log.i("Performance","Button Texts changed!");
 
         ImgDownloader dlTask = new ImgDownloader();
         try {
@@ -243,9 +255,11 @@ public class MainActivity extends AppCompatActivity {
             /**
              * This next line is stupid - conversion of text -> URL -> text -> URL wastes resources. Fix it.
              */
+            Log.i("Performance","Attempting to trigger image download...");
             Bitmap currentImg = dlTask.execute(game.current.get(game.ansIdx).profLink.toString()).get();
             celebPic.setImageBitmap(currentImg);
             downloadStatus = true;
+            Log.i("Performance","Image changed!");
 
         } catch (Exception e) {
             Log.e("Async Task","Can't download Image!");
@@ -259,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
      * @param view - contains information about which of the four available buttons was pressed.
      */
     void selected(View view){
+        Log.i("Performance","Button Clicked!");
         int ans = Integer.parseInt(view.getTag().toString().substring(2,3));
         if(--ans==game.ansIdx) {
             game.increaseScore();
@@ -276,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i("Performance","App Setup started...");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -286,14 +302,7 @@ public class MainActivity extends AppCompatActivity {
         op3 = (Button) findViewById(R.id.option3);
         op4 = (Button) findViewById(R.id.option4);
 
+        Log.i("Performance","Starting Load...");
         load();
-
-        /**
-         * Debug below. DELETE!
-         */
-        Log.d("SubstringB1",op1.getTag().toString().substring(2,3));
-        Log.d("SubstringB2",op2.getTag().toString().substring(2,3));
-        Log.d("SubstringB3",op3.getTag().toString().substring(2,3));
-        Log.d("SubstringB4",op4.getTag().toString().substring(2,3));
     }
 }
