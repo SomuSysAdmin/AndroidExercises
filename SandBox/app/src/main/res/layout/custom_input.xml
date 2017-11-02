@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="@drawable/payment_details"
-    android:foregroundTint="@color/colorAccent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/HiddenText"
         android:layout_marginStart="22dp"
         android:layout_marginTop="12dp"
         android:adjustViewBounds="true"
@@ -21,7 +19,7 @@
         app:srcCompat="@drawable/ic_mobile_focus" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/HiddenText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -33,15 +31,25 @@
         android:textSize="12sp" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/contactsIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/HiddenText"
         android:layout_marginEnd="26dp"
         android:adjustViewBounds="true"
         android:maxHeight="18dp"
         android:scaleType="fitXY"
         app:srcCompat="@drawable/contact" />
+
+    <EditText
+        android:id="@+id/textInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/contactsIcon"
+        android:layout_alignStart="@+id/HiddenText"
+        android:layout_below="@+id/HiddenText"
+        android:hint="Hint Text"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>
