@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/payment_details"
+    android:foregroundTint="@color/colorAccent">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView2"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="12dp"
+        android:adjustViewBounds="true"
+        android:maxHeight="18dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/ic_mobile_focus" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="13dp"
+        android:layout_toEndOf="@+id/icon"
+        android:text="Mobile Number"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView2"
+        android:layout_marginEnd="26dp"
+        android:adjustViewBounds="true"
+        android:maxHeight="18dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/contact" />
+
+</RelativeLayout>

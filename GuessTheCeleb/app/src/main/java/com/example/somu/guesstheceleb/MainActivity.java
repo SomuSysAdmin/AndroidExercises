@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
                 img = BitmapFactory.decodeStream(con.getInputStream());
             } catch (java.io.IOException e) {
+                Log.e("Performance", "Error reading Image from the internet!");
                 e.printStackTrace();
             }
             Log.i("Performance","Image download finished!");
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 while ((line=br.readLine())!=null)
                     data.append(line);
             } catch (java.io.IOException e) {
+                Log.e("Performance", "Error Reading data from the internet!");
                 e.printStackTrace();
             }
 
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     current = new CelebProfile(m.group(1), new URL("https:"+m.group(2)));
                 } catch (MalformedURLException e) {
-                    Log.i("Download","DB Download Failed!!");
+                    Log.e("Performance","Error in DB URL!");
                     e.printStackTrace();
                 }
                 list.add(current);
@@ -174,8 +176,10 @@ public class MainActivity extends AppCompatActivity {
                                    .get();
 
             } catch (InterruptedException e) {
+                Log.e("Performance", "DB Download error!");
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                Log.e("Performance", "DB Download error!");
                 e.printStackTrace();
             }
             Log.i("Performance","Game engine ready!");
@@ -199,16 +203,16 @@ public class MainActivity extends AppCompatActivity {
          * @return - a CelebProfile object that will be added to the current set.
          */
         CelebProfile getRandom() {
-            Log.i("Performance","Generating a random profile...");
+            Log.i("Performance","Generating a random profile... ROUND: "+round);
             int index;
             if(!(round<97)) {
                 return refreshGame();
             }
 
             Log.i("Performance","Waiting to find an unused celeb profile...");
-            while (dataStore.get(index = new Random().nextInt(dataStore.size())).visited)
-                continue;
-            round++;
+            while (dataStore.get(index = new Random().nextInt(dataStore.size())).visited) {
+                Log.i("Performance", "Already visited "+dataStore.get(index).name+", Skipping!");
+            }
             Log.i("Performance","Done!");
             return dataStore.get(index);
         }
@@ -221,7 +225,9 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Performance","Generating a new Set of profiles...");
             for(int i=0;i<4;i++) current.add(getRandom());
             ansIdx = new Random().nextInt(4);   // Randomly selects the pic to display (and the consequent answer).
+            round++;
             current.get(ansIdx).visited = true;
+            Log.i("Performance", current.get(ansIdx).name+" set to Visisted!");
             Log.i("Performance","Generation complete!");
         }
     }
@@ -262,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Performance","Image changed!");
 
         } catch (Exception e) {
-            Log.e("Async Task","Can't download Image!");
+            Log.e("Performance","Can't set Downloaded image!");
             e.printStackTrace();
             downloadStatus = false;
         }
